@@ -117,7 +117,7 @@ OUTPUT REQUIREMENTS:
 
 export async function generateReadmeFromGitHub(repoData: GitHubRepoData): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
-  
+
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY is not set');
   }
@@ -126,84 +126,131 @@ export async function generateReadmeFromGitHub(repoData: GitHubRepoData): Promis
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const topicsStr = repoData.topics.length > 0 ? repoData.topics.join(', ') : 'None';
-  const licenseStr = repoData.license || 'Not specified';
 
-  const prompt = `You are an expert at crafting professional, high-quality GitHub README.md files for open-source projects, similar to those in top repositories like React, TensorFlow, or Next.js. Your goal is to generate a premium, production-level README.md based on the provided repository data. Make it detailed, engaging, modern, and non-generic—tailor it specifically to the project's details without using placeholders or filler text. Use emojis sparingly for visual appeal, ensure excellent Markdown formatting with proper headings, lists, code blocks, and tables where appropriate. Structure it like a top-tier open-source README: visually appealing, informative, and encouraging contributions.
+  const prompt = `You are an elite technical writer specializing in creating production-quality GitHub README files for top-tier open-source projects.
 
-Repository data:
-Name: ${repoData.name}
-Description: ${repoData.description}
-Owner: ${repoData.owner.login}
-Repository: ${repoData.name} (full name is ${repoData.owner.login}/${repoData.name})
-Stars: ${repoData.stargazers_count}
-Forks: ${repoData.forks_count}
-Primary Language: ${repoData.language}
-Topics: ${topicsStr}
-License: ${licenseStr}
+REPOSITORY DATA:
+- Name: ${repoData.name}
+- Owner: ${repoData.owner.login}
+- Description: ${repoData.description}
+- Language: ${repoData.language}
+- Stars: ${repoData.stargazers_count}
+- Forks: ${repoData.forks_count}
+- Topics: ${topicsStr}
+- URL: ${repoData.html_url}
 
-Generate a README.md that includes ALL of the following sections in this exact order, expanding each with rich, professional content inferred and expanded from the data (e.g., infer features from description and topics, suggest plausible installation/usage based on language and topics, describe project structure logically):
+CRITICAL INSTRUCTIONS:
+Generate a PREMIUM GitHub README that matches the quality of top repositories like Next.js, Supabase, and Vercel.
 
-Title: Start with a large H1 header including the project name and a relevant emoji (choose based on topics/description, e.g., 🚀 for innovative tools).
+EXACT STRUCTURE TO FOLLOW:
 
-Badges: Display shields.io-style badges in a single line for: GitHub stars, forks, license, and primary language. Use Markdown image syntax like ![Stars](https://img.shields.io/github/stars/${repoData.owner.login}/${repoData.name}).
+# ${repoData.name} 🚀
 
-Overview: A professional, engaging paragraph or two summarizing the project, its purpose, unique value, and key benefits. Make it compelling and tailored, highlighting what makes this project stand out based on description and topics.
+> [Write a compelling one-line tagline based on the description and language]
 
-Features: A bulleted list of 5-8 key features, inferred and expanded from description, topics, and language. Use nested sub-bullets (indented with 2 spaces) for sub-details. Use emojis sparingly for visual appeal. Make them specific and benefit-oriented. Format like:
-- **Feature Name**: Description of the feature
-  - Sub-feature or detail
-  - Another sub-feature
+---
 
-Tech Stack: A bulleted list of technologies used, inferred from language and topics (e.g., if ${repoData.language} is JavaScript and topics include "react", list React, Node.js, etc.). DO NOT use tables. Use bullet points with clear formatting. Group by category if helpful, using sub-bullets. Format like:
-- **Category Name**:
-  - Technology 1 - Brief description
-  - Technology 2 - Brief description
-Or use numbered lists if sequential order matters. Use emojis/icons sparingly for visual appeal.
+## 📋 Overview
 
-Installation: Step-by-step numbered instructions (use numbered list: 1., 2., 3., etc.) assuming common setups (e.g., clone repo, install dependencies via npm/yarn if JS, or pip if Python). Include prerequisites as a bulleted list before the numbered steps. Use code blocks for commands. Add troubleshooting tips as a sub-section with bullet points.
+[Write 2-3 sentences explaining what this project does, why it exists, and who it's for. Be specific and professional. No generic filler.]
 
-Usage: Provide detailed examples with code snippets in appropriate language blocks. Use numbered steps or bullet points to organize usage examples. Show basic to advanced usage, tailored to the project's likely functionality based on data. Format examples clearly with headings or bullet points.
+## ✨ Features
 
-Project Structure: A tree-like representation (using Markdown code block) of a typical file/directory structure, inferred logically from language and topics. After the tree, explain key files/folders using a bulleted list with brief descriptions. Format like:
-- \`folder/file.js\` - Description of what this file does
+- **[Feature 1]**: [Brief description]
+- **[Feature 2]**: [Brief description]
+- **[Feature 3]**: [Brief description]
+- **[Feature 4]**: [Brief description]
 
-Contributing: Guidelines for contributing organized with clear subsections. Use numbered lists for sequential steps (like setup process) and bullet points for guidelines, code style rules, etc. Include:
-- How to set up dev environment (numbered steps)
-- Code style guidelines (bulleted list)
-- Pull request process (numbered steps or bullets)
-- Call to action encouraging community involvement
+[Infer features from the language, topics, and description. Be specific, not generic.]
 
-License: State the license type with a link if applicable, and include the full license notice if it's standard (e.g., MIT).
+## 🛠️ Tech Stack
 
-Author: Credit the owner with a link to their GitHub profile, and optionally add a contact section.
+- **${repoData.language}** - [Brief reason why]
+- **[Related Tech 1]** - [Inferred from topics/language]
+- **[Related Tech 2]** - [Inferred from topics/language]
 
-FORMATTING GUIDELINES:
-- DO NOT use Markdown tables - they often render poorly. Use bullet points or numbered lists instead.
-- Use bullet points (-) for unordered lists and numbered lists (1., 2., 3.) for sequential steps.
-- Use nested bullets (indent with 2 spaces) for sub-items and sub-sections.
-- Use **bold** for emphasis on key terms, section names, or technology names.
-- Use code backticks for file names, commands, and technology names inline (wrap with backticks).
-- Use code blocks for code examples (triple backticks followed by language name).
-- Add blank lines between sections for readability.
-- Use horizontal rules (---) sparingly, only between major sections if needed.
+## 📦 Installation
 
-Output ONLY the complete Markdown content for the README.md file. Do not include any additional text, explanations, or wrappers. Ensure the total length is substantial (at least 800-1500 words) but concise and readable. Use modern open-source styling: clean, scannable, with proper spacing between sections.`;
+\`\`\`bash
+# Clone the repository
+git clone ${repoData.html_url}.git
+cd ${repoData.name}
+
+# Install dependencies
+[Add appropriate install command for ${repoData.language}]
+\`\`\`
+
+##  Project Structure
+
+\`\`\`
+${repoData.name}/
+├── [Infer typical structure for ${repoData.language} projects]
+├── [Add 3-5 key directories/files]
+└── README.md
+\`\`\`
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (\`git checkout -b feature/AmazingFeature\`)
+3. Commit your changes (\`git commit -m 'Add some AmazingFeature'\`)
+4. Push to the branch (\`git push origin feature/AmazingFeature\`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
+
+**${repoData.owner.login}**
+
+- GitHub: [@${repoData.owner.login}](https://github.com/${repoData.owner.login})
+- Repository: [${repoData.name}](${repoData.html_url})
+
+---
+
+⭐ Star this repository if you find it helpful!
+
+FORMATTING RULES:
+1. Use emojis for section headers (📋 ✨ 🛠️ 📦  🤝 📄 👤)
+2. NO badges at the top - start directly with title and tagline
+3. NO Usage section - skip usage examples completely
+4. Keep descriptions concise and professional
+5. Use proper code blocks with language tags
+6. Add blank lines between sections
+7. Use bold for emphasis in feature lists
+8. Infer realistic content based on language and topics
+9. NO generic placeholder text
+10. NO excessive verbosity
+11. Output ONLY markdown, no explanations
+
+OUTPUT REQUIREMENTS:
+- Start directly with # ${repoData.name} 🚀
+- Do NOT include any badges
+- Do NOT include Usage section
+- Do NOT wrap in code blocks
+- Do NOT add explanatory text
+- Must look like a top-tier GitHub README
+- Professional, scannable, developer-friendly`;
 
   const result = await model.generateContent(prompt);
   const response = result.response;
   let text = response.text();
-  
+
   // Clean up the response
   text = text.trim();
-  
+
   if (text.startsWith('```markdown')) {
     text = text.replace(/^```markdown\n/, '').replace(/\n```$/, '');
   } else if (text.startsWith('```')) {
     text = text.replace(/^```\n/, '').replace(/\n```$/, '');
   }
-  
+
   text = text.trim();
-  
+
   return text;
 }
 
