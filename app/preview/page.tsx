@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import html2pdf from 'html2pdf.js';
 import ChatBox from '@/components/ChatBox';
+import Navbar from '@/components/Navbar';
 
 export default function PreviewPage() {
   const router = useRouter();
@@ -17,8 +18,8 @@ export default function PreviewPage() {
     if (storedReadme) {
       setReadme(storedReadme);
     } else {
-      // If no README, redirect to home
-      router.push('/');
+      // If no README, redirect to generate page
+      router.push('/generate');
     }
     setLoading(false);
   }, [router]);
@@ -50,10 +51,6 @@ export default function PreviewPage() {
     html2pdf().set(opt).from(element).save();
   };
 
-  const handleBack = () => {
-    router.push('/');
-  };
-
   const handleReadmeUpdate = (newReadme: string) => {
     console.log('=== PREVIEW UPDATE ===');
     console.log('Old README length:', readme.length);
@@ -73,30 +70,19 @@ export default function PreviewPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-pink-600 text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-pink-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
-        {/* Title */}
-        <div className="flex items-center justify-between mb-12">
-          <h1 className="text-5xl font-bold text-pink-600">
-            README Generator
-          </h1>
-          <button
-            onClick={handleBack}
-            className="text-pink-500 hover:text-pink-600 underline"
-          >
-            ← Back to Form
-          </button>
-        </div>
+    <div className="min-h-screen bg-white">
+      <Navbar variant="simple" />
 
+      <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Preview Card */}
-        <div className="bg-white rounded-2xl shadow-md border border-pink-200 p-8 mb-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-8 mb-8">
           <h2 className="text-2xl font-bold text-pink-600 mb-6">Preview</h2>
           
           <div
@@ -109,19 +95,19 @@ export default function PreviewPage() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={handleCopy}
-              className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-xl transition-colors"
+              className="flex-1 bg-gradient-to-r from-pink-500 to-pink-600 hover:shadow-lg text-white font-semibold py-3 rounded-xl transition-all"
             >
               Copy
             </button>
             <button
               onClick={handleDownload}
-              className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-xl transition-colors"
+              className="flex-1 bg-gradient-to-r from-pink-500 to-pink-600 hover:shadow-lg text-white font-semibold py-3 rounded-xl transition-all"
             >
               Download .md
             </button>
             <button
               onClick={handleExportPDF}
-              className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-xl transition-colors"
+              className="flex-1 bg-gradient-to-r from-pink-500 to-pink-600 hover:shadow-lg text-white font-semibold py-3 rounded-xl transition-all"
             >
               Export PDF
             </button>

@@ -104,7 +104,7 @@ export default function ChatBox({ readme, onReadmeUpdate }: ChatBoxProps) {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-pink-200 p-6">
+    <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6">
       <h2 className="text-2xl font-bold text-pink-600 mb-4">
         Refine your README
       </h2>
@@ -183,7 +183,7 @@ export default function ChatBox({ readme, onReadmeUpdate }: ChatBoxProps) {
         <button
           onClick={handleSend}
           disabled={loading || !input.trim()}
-          className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-pink-500 to-pink-600 hover:shadow-lg text-white font-semibold px-6 py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? '...' : 'Send'}
         </button>
