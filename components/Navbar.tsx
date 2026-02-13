@@ -122,3 +122,4 @@ export default function Navbar({ variant = 'landing' }: NavbarProps) {
   );
 }
 
+

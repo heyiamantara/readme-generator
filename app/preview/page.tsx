@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
-import html2pdf from 'html2pdf.js';
 import ChatBox from '@/components/ChatBox';
-import Navbar from '@/components/Navbar';
 
 export default function PreviewPage() {
   const router = useRouter();
@@ -39,14 +38,19 @@ export default function PreviewPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     const element = document.getElementById('readme-preview');
+    if (!element) return;
+    
+    // Dynamically import html2pdf only on client side
+    const html2pdf = (await import('html2pdf.js')).default;
+    
     const opt = {
       margin: 1,
       filename: 'README.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      jsPDF: { unit: 'in' as const, format: 'letter' as const, orientation: 'portrait' as const },
     };
     html2pdf().set(opt).from(element).save();
   };
@@ -70,15 +74,30 @@ export default function PreviewPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white flex items-center justify-center">
         <div className="text-pink-600 text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar variant="simple" />
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-pink-100">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-pink-600 bg-clip-text text-transparent cursor-pointer">
+              README Generator
+            </h1>
+          </Link>
+          <Link
+            href="/generate"
+            className="text-gray-600 hover:text-pink-600 transition-colors"
+          >
+            ← New README
+          </Link>
+        </div>
+      </nav>
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Preview Card */}
