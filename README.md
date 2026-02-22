@@ -1,4 +1,4 @@
-# README Generator
+# README Generator project
 
 A premium AI-powered SaaS app that generates professional GitHub README.md files automatically by analyzing any GitHub repository.
 
