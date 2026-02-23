@@ -1,10 +1,4 @@
-'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import ChatBox from '@/components/ChatBox';
 
 export default function PreviewPage() {
   const router = useRouter();
