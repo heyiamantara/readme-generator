@@ -1,4 +1,4 @@
-# README Generator
+# Readme Generator Project
 
 A premium AI-powered SaaS app that generates professional GitHub README.md files automatically by analyzing any GitHub repository.
 
@@ -24,11 +24,9 @@ A premium AI-powered SaaS app that generates professional GitHub README.md files
 
 ## Page Structure
 
-```
 /                → Premium Landing Page
 /generate        → GitHub URL input page
 /preview         → README preview with AI chat
-```
 
 ## User Flow
 
@@ -40,9 +38,7 @@ A premium AI-powered SaaS app that generates professional GitHub README.md files
 
 ### 1. Install Dependencies
 
-```bash
 npm install
-```
 
 ### 2. Get API Key
 
@@ -52,15 +48,11 @@ Get your Gemini API key from [Google AI Studio](https://makersuite.google.com/ap
 
 Create a `.env.local` file:
 
-```bash
 GEMINI_API_KEY=your_gemini_api_key_here
-```
 
 ### 4. Run Development Server
 
-```bash
 npm run dev
-```
 
 ### 5. Open Browser
 
@@ -131,7 +123,6 @@ Example commands:
 
 ## Project Structure
 
-```
 readme-generator/
 ├── app/
 │   ├── api/
@@ -152,7 +143,6 @@ readme-generator/
 │   ├── gemini.ts              # Gemini AI functions
 │   └── github.ts              # GitHub API integration
 └── .env.local                 # Environment variables
-```
 
 ## API Functions
 
